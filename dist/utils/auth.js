@@ -15,14 +15,14 @@ var _register = require("../validation/register");
 var newToken = function newToken(user) {
   return _jsonwebtoken["default"].sign({
     id: user.id
-  }, _dev.config.secrets.jwtSecret, {
-    expiresIn: _dev.config.secrets.jwtExp
+  }, _dev.config.secrets.jwtSecret || process.env.jwtSecret, {
+    expiresIn: _dev.config.secrets.jwtExp || process.env.jwtExp
   });
 };
 exports.newToken = newToken;
 var verifyToken = function verifyToken(token) {
   return new Promise(function (resolve, reject) {
-    _jsonwebtoken["default"].verify(token, _dev.config.secrets.jwtSecret, function (err, payload) {
+    _jsonwebtoken["default"].verify(token, _dev.config.secrets.jwtSecret || process.env.jwtSecret, function (err, payload) {
       if (err) {
         return reject(err);
       }

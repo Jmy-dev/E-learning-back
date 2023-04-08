@@ -8,15 +8,15 @@ import { validateRegisterInput } from '../validation/register'
 
 
 export const newToken = user => {
-    return jwt.sign ({ id: user.id} , config.secrets.jwtSecret , {
-        expiresIn: config.secrets.jwtExp
+    return jwt.sign ({ id: user.id} , config.secrets.jwtSecret|| process.env.jwtSecret , {
+        expiresIn: config.secrets.jwtExp || process.env.jwtExp
     })
 }
 
 
 export const verifyToken = token => {
     return new Promise ( (resolve , reject) => {
-        jwt.verify(token , config.secrets.jwtSecret , (err , payload) => {
+        jwt.verify(token ,  config.secrets.jwtSecret|| process.env.jwtSecret , (err , payload) => {
             if (err) {
                 return reject(err);
             }

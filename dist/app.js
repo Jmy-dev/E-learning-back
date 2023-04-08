@@ -34,7 +34,7 @@ app.use('/api', _auth.protect);
 app.use('/api/user', _user["default"]);
 app.use('/api/department', _department["default"]);
 app.use('/api/course', _course["default"]);
-_mongoose["default"].connect(_dev.config.secrets.dbConnection, {
+_mongoose["default"].connect(_dev.config.secrets.dbConnection || process.env.dbConnection, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(function () {

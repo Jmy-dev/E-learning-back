@@ -36,7 +36,7 @@ app.use('/api/department' , departmentRouter)
 app.use('/api/course' , courseRouter)
 
 
-mongoose.connect(config.secrets.dbConnection, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(config.secrets.dbConnection || process.env.dbConnection, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log("Mongodb is connected!!")
         app.listen(PORT, () => {
