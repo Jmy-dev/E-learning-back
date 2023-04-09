@@ -128,26 +128,7 @@ export const updateCourse = async (req , res) => {
                    }
                 }
                 
-        
-            } 
-            
-            // if(req.body.users) {
-            //     const course = await Course.findById(req.params.id)
-            //     .exec();
-                
-            //     if(!course.pdfLinks.includes(req.body.pdfLinks)) {
-            //         console.log("Hey!!")
-            //         const updatedCourse = await Course.findByIdAndUpdate({_id:req.params.id} , {$push: {pdfLinks:req.body.pdfLinks}} , {new: true})
-            //         .exec()
-            //         if(!updatedCourse) {
-            //             return res.status(400)
-            //         }
-            //     }
-
-            // }
-
-            
-                
+            }         
                 const body = {
                     name : req.body.name ,
                     code : req.body.code ,
@@ -163,10 +144,6 @@ export const updateCourse = async (req , res) => {
                 }
                 return res.status(200).json({updatedCourse})
     
-
-
-
-
         }
         return res.status(401).json({error: "You are not authorized to perform such an action!"})
         

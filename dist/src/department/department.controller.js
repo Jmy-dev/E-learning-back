@@ -144,13 +144,13 @@ var updateDepartment = /*#__PURE__*/function () {
 exports.updateDepartment = updateDepartment;
 var deleteDepartment = /*#__PURE__*/function () {
   var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(req, res) {
-    var department, index, user, _deleteDepartment;
+    var department, index, user, course, _deleteDepartment;
     return _regenerator["default"].wrap(function _callee4$(_context4) {
       while (1) switch (_context4.prev = _context4.next) {
         case 0:
           _context4.prev = 0;
           if (!req.user.isAdmin) {
-            _context4.next = 23;
+            _context4.next = 28;
             break;
           }
           _context4.next = 4;
@@ -168,7 +168,7 @@ var deleteDepartment = /*#__PURE__*/function () {
           index = 0;
         case 8:
           if (!(index < department.users.length)) {
-            _context4.next = 17;
+            _context4.next = 22;
             break;
           }
           _context4.next = 11;
@@ -183,45 +183,65 @@ var deleteDepartment = /*#__PURE__*/function () {
           });
         case 11:
           user = _context4.sent;
+          _context4.next = 14;
+          return _course.Course.findByIdAndUpdate({
+            _id: department.courses[index]
+          }, {
+            $unset: {
+              department: department._id
+            }
+          }, {
+            "new": true
+          });
+        case 14:
+          course = _context4.sent;
           if (user) {
-            _context4.next = 14;
+            _context4.next = 17;
             break;
           }
           return _context4.abrupt("return", res.status(404).json({
             msg: "department error!!  "
           }));
-        case 14:
+        case 17:
+          if (course) {
+            _context4.next = 19;
+            break;
+          }
+          return _context4.abrupt("return", res.status(400).json({
+            msg: "course error!!"
+          }));
+        case 19:
           index++;
           _context4.next = 8;
           break;
-        case 17:
-          _context4.next = 19;
+        case 22:
+          _context4.next = 24;
           return _department.Department.findByIdAndDelete(req.params.id);
-        case 19:
+        case 24:
           _deleteDepartment = _context4.sent;
           if (!_deleteDepartment) {
-            _context4.next = 22;
+            _context4.next = 27;
             break;
           }
           return _context4.abrupt("return", res.status(200).json({
             msg: "Department Deleted"
           }));
-        case 22:
+        case 27:
           return _context4.abrupt("return", res.status(400).end());
-        case 23:
+        case 28:
           return _context4.abrupt("return", res.status(401).json({
             error: "You are not authorized to perform such an action!"
           }));
-        case 26:
-          _context4.prev = 26;
+        case 31:
+          _context4.prev = 31;
           _context4.t0 = _context4["catch"](0);
           console.error(_context4.t0);
           res.status(400).end();
-        case 30:
+        case 35:
         case "end":
           return _context4.stop();
       }
-    }, _callee4, null, [[0, 26]]);
+    }, _callee4, null, [[0, 31]]);
   }));
   return function deleteDepartment(_x7, _x8) {
     return _ref4.apply(this, arguments);
@@ -318,7 +338,7 @@ var getAllDepartmentCourses = /*#__PURE__*/function () {
         case 0:
           _context7.prev = 0;
           _context7.next = 3;
-          return _department.Department.findById(req.params.id).select('courses', 'name').populate('course').lean().exec();
+          return _department.Department.findById(req.params.id).select('courses').populate('course').lean().exec();
         case 3:
           courses = _context7.sent;
           if (courses) {

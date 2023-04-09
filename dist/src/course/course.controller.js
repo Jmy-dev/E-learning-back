@@ -275,18 +275,6 @@ var updateCourse = /*#__PURE__*/function () {
           }
           return _context4.abrupt("return", res.status(400));
         case 47:
-          // if(req.body.users) {
-          //     const course = await Course.findById(req.params.id)
-          //     .exec();
-          //     if(!course.pdfLinks.includes(req.body.pdfLinks)) {
-          //         console.log("Hey!!")
-          //         const updatedCourse = await Course.findByIdAndUpdate({_id:req.params.id} , {$push: {pdfLinks:req.body.pdfLinks}} , {new: true})
-          //         .exec()
-          //         if(!updatedCourse) {
-          //             return res.status(400)
-          //         }
-          //     }
-          // }
           body = {
             name: req.body.name,
             code: req.body.code,

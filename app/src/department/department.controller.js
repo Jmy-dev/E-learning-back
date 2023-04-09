@@ -84,9 +84,13 @@ export const deleteDepartment = async (req , res) => {
             // loop inside the department and unset the department id from all it's users
             for (let index = 0; index < department.users.length; index++) {
                 const user = await User.findByIdAndUpdate({ _id: department.users[index] }, { $unset: { department: department._id } }, { new: true });
+                const course = await Course.findByIdAndUpdate({ _id: department.courses[index]}, { $unset: { department: department._id } }, { new: true });
 
                 if (!user) {
                     return res.status(404).json({ msg: "department error!!  " })
+                }
+                if(!course) {
+                    return res.status(400).json({msg: "course error!!"})
                 }
 
             }
@@ -153,7 +157,7 @@ export const getDepartmentUsers = async (req , res) => {
 export const getAllDepartmentCourses = async (req , res) => {
     try {
      const courses = await Department.findById(req.params.id)
-     .select('courses' , 'name')
+     .select('courses')
      .populate('course')
      .lean()
      .exec()
