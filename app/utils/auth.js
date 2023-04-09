@@ -16,7 +16,7 @@ export const newToken = user => {
 
 export const verifyToken = token => {
     return new Promise ( (resolve , reject) => {
-        jwt.verify(token ,  config.secrets.jwtSecret|| process.env.jwtSecret , (err , payload) => {
+        jwt.verify(token ,  config.secrets.jwtSecret||process.env.jwtSecret , (err , payload) => {
             if (err) {
                 return reject(err);
             }
@@ -73,7 +73,7 @@ export const signin = async (req , res) => {
             return res.status(400).end()
         }
 
-        return res.status(201).json({token})
+        return res.status(201).json({user , token})
         
         
     } catch (e) {

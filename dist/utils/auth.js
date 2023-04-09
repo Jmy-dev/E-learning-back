@@ -116,6 +116,7 @@ var signin = /*#__PURE__*/function () {
           return _context2.abrupt("return", res.status(400).end());
         case 14:
           return _context2.abrupt("return", res.status(201).json({
+            user: user,
             token: token
           }));
         case 17:
