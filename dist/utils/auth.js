@@ -115,21 +115,20 @@ var signin = /*#__PURE__*/function () {
           }
           return _context2.abrupt("return", res.status(400).end());
         case 14:
-          D;
           return _context2.abrupt("return", res.status(201).json({
             user: user,
             token: token
           }));
-        case 18:
-          _context2.prev = 18;
+        case 17:
+          _context2.prev = 17;
           _context2.t0 = _context2["catch"](0);
           console.error(_context2.t0);
           return _context2.abrupt("return", res.status(400).end());
-        case 22:
+        case 21:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[0, 18]]);
+    }, _callee2, null, [[0, 17]]);
   }));
   return function signin(_x3, _x4) {
     return _ref2.apply(this, arguments);
