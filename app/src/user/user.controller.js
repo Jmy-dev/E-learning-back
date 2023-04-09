@@ -50,8 +50,16 @@ export const updateUser = async (req , res) => {
                 .lean()
                 .exec()
 
+                if(!user) {
+                    return res.status(400).json({error: "there is no such a user"})
+                }
+
                 const department = await Department.findById(req.body.department)
                 .exec();
+
+                if(!department) {
+                    return res.status(400).json({error: "Department error!!"})
+                }
 
                 if(!department.users.includes(ownerId)) {
                     const updatedDepartment = await Department.updateOne({_id:department._id},{$push: {users: ownerId}} , {new: true} );

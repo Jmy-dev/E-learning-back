@@ -71,26 +71,42 @@ var updateUser = /*#__PURE__*/function () {
           ownerId = req.params.id; //EXECUTER 
           executerId = req.user._id;
           if (!(ownerId == executerId || req.user.isAdmin)) {
-            _context2.next = 38;
+            _context2.next = 42;
             break;
           }
           if (!req.body.department) {
-            _context2.next = 19;
+            _context2.next = 23;
             break;
           }
           _context2.next = 9;
           return _user2.User.findById(req.params.id).lean().exec();
         case 9:
           user = _context2.sent;
-          _context2.next = 12;
-          return _department.Department.findById(req.body.department).exec();
-        case 12:
-          department = _context2.sent;
-          if (department.users.includes(ownerId)) {
-            _context2.next = 19;
+          if (user) {
+            _context2.next = 12;
             break;
           }
-          _context2.next = 16;
+          return _context2.abrupt("return", res.status(400).json({
+            error: "there is no such a user"
+          }));
+        case 12:
+          _context2.next = 14;
+          return _department.Department.findById(req.body.department).exec();
+        case 14:
+          department = _context2.sent;
+          if (department) {
+            _context2.next = 17;
+            break;
+          }
+          return _context2.abrupt("return", res.status(400).json({
+            error: "Department error!!"
+          }));
+        case 17:
+          if (department.users.includes(ownerId)) {
+            _context2.next = 23;
+            break;
+          }
+          _context2.next = 20;
           return _department.Department.updateOne({
             _id: department._id
           }, {
@@ -100,31 +116,31 @@ var updateUser = /*#__PURE__*/function () {
           }, {
             "new": true
           });
-        case 16:
+        case 20:
           updatedDepartment = _context2.sent;
           if (updatedDepartment) {
-            _context2.next = 19;
+            _context2.next = 23;
             break;
           }
           return _context2.abrupt("return", res.status(400));
-        case 19:
+        case 23:
           if (!req.body.courses) {
-            _context2.next = 32;
+            _context2.next = 36;
             break;
           }
-          _context2.next = 22;
+          _context2.next = 26;
           return _user2.User.findById(req.params.id).lean().exec();
-        case 22:
+        case 26:
           _user = _context2.sent;
-          _context2.next = 25;
+          _context2.next = 29;
           return _course.Course.findById(req.body.courses).exec();
-        case 25:
+        case 29:
           course = _context2.sent;
           if (course.users.includes(ownerId)) {
-            _context2.next = 32;
+            _context2.next = 36;
             break;
           }
-          _context2.next = 29;
+          _context2.next = 33;
           return _course.Course.updateOne({
             _id: course._id
           }, {
@@ -134,45 +150,45 @@ var updateUser = /*#__PURE__*/function () {
           }, {
             "new": true
           });
-        case 29:
+        case 33:
           updatedCourse = _context2.sent;
           if (updatedCourse) {
-            _context2.next = 32;
+            _context2.next = 36;
             break;
           }
           return _context2.abrupt("return", res.status(400));
-        case 32:
-          _context2.next = 34;
+        case 36:
+          _context2.next = 38;
           return _user2.User.findOneAndUpdate({
             _id: req.params.id
           }, req.body, {
             "new": true
           }).exec();
-        case 34:
+        case 38:
           updatedUser = _context2.sent;
           if (updatedUser) {
-            _context2.next = 37;
+            _context2.next = 41;
             break;
           }
           return _context2.abrupt("return", res.status(400).end());
-        case 37:
+        case 41:
           return _context2.abrupt("return", res.status(201).json({
             updatedUser: updatedUser
           }));
-        case 38:
+        case 42:
           return _context2.abrupt("return", res.status(401).json({
             error: 'you are not authorized!!'
           }));
-        case 41:
-          _context2.prev = 41;
+        case 45:
+          _context2.prev = 45;
           _context2.t0 = _context2["catch"](0);
           console.error(_context2.t0);
           res.status(400).end();
-        case 45:
+        case 49:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[0, 41]]);
+    }, _callee2, null, [[0, 45]]);
   }));
   return function updateUser(_x3, _x4) {
     return _ref2.apply(this, arguments);

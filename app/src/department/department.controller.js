@@ -158,7 +158,7 @@ export const getAllDepartmentCourses = async (req , res) => {
     try {
      const courses = await Department.findById(req.params.id)
      .select('courses')
-     .populate('course')
+     .populate('courses')
      .lean()
      .exec()
 
@@ -168,6 +168,7 @@ export const getAllDepartmentCourses = async (req , res) => {
      return res.status(200).json({courses})
      
     } catch (e) {
+        console.error(e)
      res.status(400).end()
     }
  

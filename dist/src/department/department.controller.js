@@ -338,7 +338,7 @@ var getAllDepartmentCourses = /*#__PURE__*/function () {
         case 0:
           _context7.prev = 0;
           _context7.next = 3;
-          return _department.Department.findById(req.params.id).select('courses').populate('course').lean().exec();
+          return _department.Department.findById(req.params.id).select('courses').populate('courses').lean().exec();
         case 3:
           courses = _context7.sent;
           if (courses) {
@@ -353,8 +353,9 @@ var getAllDepartmentCourses = /*#__PURE__*/function () {
         case 9:
           _context7.prev = 9;
           _context7.t0 = _context7["catch"](0);
+          console.error(_context7.t0);
           res.status(400).end();
-        case 12:
+        case 13:
         case "end":
           return _context7.stop();
       }
