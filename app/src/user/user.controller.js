@@ -10,7 +10,45 @@ export const me = (req , res) => {
     res.status(200).json({data : req.user})
 }
 
+export const getAllStudents = async (req , res) => {
+    try {
 
+        
+        const students = await User.find({isAdmin:false , isDoctor:false})
+        .lean()
+        .exec()
+
+        if(!students || students.length ==0) {
+            return res.status(400).json({error: "There is no students !!"})
+        }
+
+        return res.status(200).json({students})
+        
+    } catch (e) {
+        console.error(e)
+        res.status(400).end()
+    }
+}
+
+export const getAllDoctors = async (req , res) => {
+    try {
+
+        
+        const doctors = await User.find({ isDoctor:true})
+        .lean()
+        .exec()
+
+        if(!doctors || doctors.length ==0) {
+            return res.status(400).json({error: "There is no doctors !!"})
+        }
+
+        return res.status(200).json({doctors})
+        
+    } catch (e) {
+        console.error(e)
+        res.status(400).end()
+    }
+}
 export const getUser = async (req , res) => {
     try {
 

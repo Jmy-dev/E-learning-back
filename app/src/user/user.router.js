@@ -1,12 +1,20 @@
 import {Router} from 'express'
 
-import {me , getUser , updateUser , deleteUser} from './user.controller'
+import {me , getUser , updateUser , deleteUser , getAllStudents , getAllDoctors} from './user.controller'
 
 const router = Router();
 
 
 //api/user/me
 router.get('/me' , me);
+
+//api/user/students
+
+router.get('/students' , getAllStudents)
+
+//api/user/doctors 
+
+router.get('/doctors' , getAllDoctors)
 
 //api/user/:id
 
@@ -16,5 +24,6 @@ router
    .put(updateUser)
    .delete(deleteUser)
 
+   
 
 export default router;

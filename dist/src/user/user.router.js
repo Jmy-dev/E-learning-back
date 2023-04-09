@@ -11,6 +11,14 @@ var router = (0, _express.Router)();
 //api/user/me
 router.get('/me', _user.me);
 
+//api/user/students
+
+router.get('/students', _user.getAllStudents);
+
+//api/user/doctors 
+
+router.get('/doctors', _user.getAllDoctors);
+
 //api/user/:id
 
 router.route('/:id').get(_user.getUser).put(_user.updateUser)["delete"](_user.deleteUser);
