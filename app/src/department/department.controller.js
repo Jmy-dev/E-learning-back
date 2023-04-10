@@ -9,6 +9,7 @@ export const getDepartment = async (req , res) =>{
     try {
         const department = await Department.findById(req.params.id)
         .populate('users')
+        .populate('courses')
         .lean()
         .exec()
 

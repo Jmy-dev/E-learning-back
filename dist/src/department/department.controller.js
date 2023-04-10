@@ -19,7 +19,7 @@ var getDepartment = /*#__PURE__*/function () {
         case 0:
           _context.prev = 0;
           _context.next = 3;
-          return _department.Department.findById(req.params.id).populate('users').lean().exec();
+          return _department.Department.findById(req.params.id).populate('users').populate('courses').lean().exec();
         case 3:
           department = _context.sent;
           if (!department) {
