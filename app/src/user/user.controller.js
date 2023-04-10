@@ -6,8 +6,13 @@ import bcrypt from 'bcryptjs'
 import { Department } from '../department/department.model'
 
 
-export const me = (req , res) => {
-    res.status(200).json({data : req.user})
+export const me = async (req , res) => {
+    const me = await User.findById(req.user.id)
+    .populate('courses')
+    .populate('department')
+    .lean()
+    .exec()
+    res.status(200).json({me})
 }
 
 export const getAllStudents = async (req , res) => {
