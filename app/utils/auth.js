@@ -65,6 +65,8 @@ export const signin = async (req , res) => {
 
 
         const user = await User.findOne({ loginId: req.body.loginId })
+        .populate('department')
+        .populate('courses')
         .exec()
 
         const token = newToken(user) ;

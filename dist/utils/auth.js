@@ -105,7 +105,7 @@ var signin = /*#__PURE__*/function () {
           _context2.next = 10;
           return _user.User.findOne({
             loginId: req.body.loginId
-          }).exec();
+          }).populate('department').populate('courses').exec();
         case 10:
           user = _context2.sent;
           token = newToken(user);
