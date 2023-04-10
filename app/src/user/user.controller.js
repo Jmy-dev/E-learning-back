@@ -7,11 +7,12 @@ import { Department } from '../department/department.model'
 
 
 export const me = async (req , res) => {
-    const me = await User.findById(req.user.id)
+    const me = await User.findById(req.user._id)
     .populate('courses')
     .populate('department')
     .lean()
     .exec()
+    console.log(me)
     res.status(200).json({me})
 }
 
@@ -118,9 +119,17 @@ export const updateUser = async (req , res) => {
                 const user = await User.findById(req.params.id)
                 .lean()
                 .exec()
+                if(!user) {
+                    return res.status(400).json({error: "there is no such a user"})
+                }
 
+                
                 const course = await Course.findById(req.body.courses)
                 .exec()
+                
+                if(!course) {
+                    return res.status(400).json({error: "course error!!"})
+                }
                 
                 if(!course.users.includes(ownerId)) {
                     const updatedCourse  = await Course.updateOne({_id:course._id} , {$push: {users: ownerId}} , {new: true}); 

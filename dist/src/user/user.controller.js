@@ -19,13 +19,14 @@ var me = /*#__PURE__*/function () {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _context.next = 2;
-          return _user2.User.findById(req.user.id).populate('courses').populate('department').lean().exec();
+          return _user2.User.findById(req.user._id).populate('courses').populate('department').lean().exec();
         case 2:
           me = _context.sent;
+          console.log(me);
           res.status(200).json({
             me: me
           });
-        case 4:
+        case 5:
         case "end":
           return _context.stop();
       }
@@ -170,7 +171,7 @@ var updateUser = /*#__PURE__*/function () {
           ownerId = req.params.id; //EXECUTER 
           executerId = req.user._id;
           if (!(ownerId == executerId || req.user.isAdmin)) {
-            _context5.next = 42;
+            _context5.next = 46;
             break;
           }
           if (!req.body.department) {
@@ -224,22 +225,38 @@ var updateUser = /*#__PURE__*/function () {
           return _context5.abrupt("return", res.status(400));
         case 23:
           if (!req.body.courses) {
-            _context5.next = 36;
+            _context5.next = 40;
             break;
           }
           _context5.next = 26;
           return _user2.User.findById(req.params.id).lean().exec();
         case 26:
           _user = _context5.sent;
-          _context5.next = 29;
-          return _course.Course.findById(req.body.courses).exec();
-        case 29:
-          course = _context5.sent;
-          if (course.users.includes(ownerId)) {
-            _context5.next = 36;
+          if (_user) {
+            _context5.next = 29;
             break;
           }
-          _context5.next = 33;
+          return _context5.abrupt("return", res.status(400).json({
+            error: "there is no such a user"
+          }));
+        case 29:
+          _context5.next = 31;
+          return _course.Course.findById(req.body.courses).exec();
+        case 31:
+          course = _context5.sent;
+          if (course) {
+            _context5.next = 34;
+            break;
+          }
+          return _context5.abrupt("return", res.status(400).json({
+            error: "course error!!"
+          }));
+        case 34:
+          if (course.users.includes(ownerId)) {
+            _context5.next = 40;
+            break;
+          }
+          _context5.next = 37;
           return _course.Course.updateOne({
             _id: course._id
           }, {
@@ -249,45 +266,45 @@ var updateUser = /*#__PURE__*/function () {
           }, {
             "new": true
           });
-        case 33:
+        case 37:
           updatedCourse = _context5.sent;
           if (updatedCourse) {
-            _context5.next = 36;
+            _context5.next = 40;
             break;
           }
           return _context5.abrupt("return", res.status(400));
-        case 36:
-          _context5.next = 38;
+        case 40:
+          _context5.next = 42;
           return _user2.User.findOneAndUpdate({
             _id: req.params.id
           }, req.body, {
             "new": true
           }).exec();
-        case 38:
+        case 42:
           updatedUser = _context5.sent;
           if (updatedUser) {
-            _context5.next = 41;
+            _context5.next = 45;
             break;
           }
           return _context5.abrupt("return", res.status(400).end());
-        case 41:
+        case 45:
           return _context5.abrupt("return", res.status(201).json({
             updatedUser: updatedUser
           }));
-        case 42:
+        case 46:
           return _context5.abrupt("return", res.status(401).json({
             error: 'you are not authorized!!'
           }));
-        case 45:
-          _context5.prev = 45;
+        case 49:
+          _context5.prev = 49;
           _context5.t0 = _context5["catch"](0);
           console.error(_context5.t0);
           res.status(400).end();
-        case 49:
+        case 53:
         case "end":
           return _context5.stop();
       }
-    }, _callee5, null, [[0, 45]]);
+    }, _callee5, null, [[0, 49]]);
   }));
   return function updateUser(_x9, _x10) {
     return _ref5.apply(this, arguments);
