@@ -10,9 +10,10 @@ var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/
 var _validator = _interopRequireDefault(require("validator"));
 var _isEmpty = _interopRequireDefault(require("./isEmpty"));
 var _user = require("../src/user/user.model");
+var _department = require("../src/department/department.model");
 var validateRegisterInput = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(data) {
-    var errors, existLoginId, existName;
+    var errors, department, existLoginId, existName;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -20,22 +21,35 @@ var validateRegisterInput = /*#__PURE__*/function () {
           data.name = !(0, _isEmpty["default"])(data.name) ? data.name : '';
           data.level = !(0, _isEmpty["default"])(data.level) ? data.level : '';
           data.loginId = !(0, _isEmpty["default"])(data.loginId) ? data.loginId : '';
+          data.department = !(0, _isEmpty["default"])(data.department) ? data.department : '';
           data.password = !(0, _isEmpty["default"])(data.password) ? data.password : '';
           data.password2 = !(0, _isEmpty["default"])(data.password2) ? data.password2 : '';
-          _context.next = 8;
+          if (!data.department) {
+            _context.next = 12;
+            break;
+          }
+          _context.next = 10;
+          return _department.Department.findById(data.department).lean().exec();
+        case 10:
+          department = _context.sent;
+          if (!department) {
+            errors.department = "There is no such department";
+          }
+        case 12:
+          _context.next = 14;
           return _user.User.findOne({
             loginId: data.loginId
           }).lean().exec();
-        case 8:
+        case 14:
           existLoginId = _context.sent;
           if (existLoginId) {
             errors.loginId = "loginId is already exist";
           }
-          _context.next = 12;
+          _context.next = 18;
           return _user.User.findOne({
             name: data.name
           }).lean().exec();
-        case 12:
+        case 18:
           existName = _context.sent;
           if (existName) {
             errors.name = "Name is already exist";
@@ -77,7 +91,7 @@ var validateRegisterInput = /*#__PURE__*/function () {
             errors: errors,
             isValid: (0, _isEmpty["default"])(errors)
           });
-        case 24:
+        case 30:
         case "end":
           return _context.stop();
       }

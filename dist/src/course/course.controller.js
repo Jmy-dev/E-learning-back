@@ -343,7 +343,7 @@ var deleteCourse = /*#__PURE__*/function () {
           index = 0;
         case 8:
           if (!(index < course.users.length)) {
-            _context5.next = 22;
+            _context5.next = 17;
             break;
           }
           _context5.next = 11;
@@ -358,7 +358,19 @@ var deleteCourse = /*#__PURE__*/function () {
           });
         case 11:
           user = _context5.sent;
-          _context5.next = 14;
+          if (user) {
+            _context5.next = 14;
+            break;
+          }
+          return _context5.abrupt("return", res.status(404).json({
+            msg: "user error!!  "
+          }));
+        case 14:
+          index++;
+          _context5.next = 8;
+          break;
+        case 17:
+          _context5.next = 19;
           return _department.Department.findByIdAndUpdate({
             _id: course.department
           }, {
@@ -368,27 +380,15 @@ var deleteCourse = /*#__PURE__*/function () {
           }, {
             "new": true
           });
-        case 14:
-          department = _context5.sent;
-          if (user) {
-            _context5.next = 17;
-            break;
-          }
-          return _context5.abrupt("return", res.status(404).json({
-            msg: "course error!!  "
-          }));
-        case 17:
-          if (department) {
-            _context5.next = 19;
-            break;
-          }
-          return _context5.abrupt("return", res.status(404).json({
-            msg: "course error!!  "
-          }));
         case 19:
-          index++;
-          _context5.next = 8;
-          break;
+          department = _context5.sent;
+          if (department) {
+            _context5.next = 22;
+            break;
+          }
+          return _context5.abrupt("return", res.status(404).json({
+            msg: "department error!!  "
+          }));
         case 22:
           _context5.next = 24;
           return _course4.Course.findByIdAndDelete(req.params.id).lean().exec();

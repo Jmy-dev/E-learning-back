@@ -1,6 +1,7 @@
 import Validator from 'validator'
 import isEmpty from './isEmpty'
 import {User} from '../src/user/user.model'
+import {Department} from '../src/department/department.model'
 
 
 export const validateRegisterInput = async (data) => {
@@ -9,8 +10,22 @@ export const validateRegisterInput = async (data) => {
     data.name = !isEmpty(data.name) ? data.name : '';
     data.level = !isEmpty(data.level) ? data.level : '';
     data.loginId = !isEmpty(data.loginId) ? data.loginId : '';
+    data.department = !isEmpty(data.department) ? data.department : '';
     data.password = !isEmpty(data.password) ? data.password : '';
     data.password2 = !isEmpty(data.password2) ? data.password2 : '';
+
+   
+    if(data.department) {
+        const department = await Department.findById(data.department)
+        .lean()
+        .exec()
+
+        if(!department) {
+            errors.department = "There is no such department"
+        }
+
+        
+    }
 
     const existLoginId = await User.findOne({loginId: data.loginId})
     .lean()

@@ -128,7 +128,7 @@ var getUser = /*#__PURE__*/function () {
           _context4.next = 3;
           return _user2.User.findOne({
             _id: req.params.id
-          }).populate('department', 'course').lean().exec();
+          }).populate('department').populate('courses').lean().exec();
         case 3:
           user = _context4.sent;
           if (user) {

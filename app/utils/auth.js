@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken' 
 import {config} from '../config/dev'
 import {User} from '../src/user/user.model'
+import { Department } from '../src/department/department.model'
 import { validateLoginInput } from '../validation/login'
 import { validateRegisterInput } from '../validation/register'
 
@@ -36,6 +37,7 @@ export const signup = async (req , res) => {
     if(!isValid) {
         return res.status(400).json({errors})
      }
+    
 
         const user = await User.create(req.body);
 
@@ -43,6 +45,28 @@ export const signup = async (req , res) => {
             
             return res.status(400).end()
         }
+
+        if(req.body.department) {
+            const department = await Department.findById(req.body.department)
+            .lean()
+            .exec()
+    
+            if(!department) {
+                return res.status(400).json({error: "There is no such department"}) 
+            }
+    
+        
+    
+            const updatedDepartment = await Department.findByIdAndUpdate(req.body.department , {$push: {users:user.id}} , {new : true})
+            .lean()
+            .exec()
+
+            if(!updatedDepartment) {
+                return res.status(400).end()
+            }
+        }
+
+
         return res.status(201).json({user})
         
     } catch (e) {
@@ -68,6 +92,10 @@ export const signin = async (req , res) => {
         .populate('department')
         .populate('courses')
         .exec()
+
+        if(!user) {
+            return res.status(400).end()
+        }
 
         const token = newToken(user) ;
 

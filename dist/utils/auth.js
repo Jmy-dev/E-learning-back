@@ -10,6 +10,7 @@ var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 var _dev = require("../config/dev");
 var _user = require("../src/user/user.model");
+var _department = require("../src/department/department.model");
 var _login = require("../validation/login");
 var _register = require("../validation/register");
 var newToken = function newToken(user) {
@@ -33,7 +34,7 @@ var verifyToken = function verifyToken(token) {
 exports.verifyToken = verifyToken;
 var signup = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res) {
-    var _yield$validateRegist, errors, isValid, user;
+    var _yield$validateRegist, errors, isValid, user, department, updatedDepartment;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -62,19 +63,51 @@ var signup = /*#__PURE__*/function () {
           }
           return _context.abrupt("return", res.status(400).end());
         case 13:
+          if (!req.body.department) {
+            _context.next = 24;
+            break;
+          }
+          _context.next = 16;
+          return _department.Department.findById(req.body.department).lean().exec();
+        case 16:
+          department = _context.sent;
+          if (department) {
+            _context.next = 19;
+            break;
+          }
+          return _context.abrupt("return", res.status(400).json({
+            error: "There is no such department"
+          }));
+        case 19:
+          _context.next = 21;
+          return _department.Department.findByIdAndUpdate(req.body.department, {
+            $push: {
+              users: user.id
+            }
+          }, {
+            "new": true
+          }).lean().exec();
+        case 21:
+          updatedDepartment = _context.sent;
+          if (updatedDepartment) {
+            _context.next = 24;
+            break;
+          }
+          return _context.abrupt("return", res.status(400).end());
+        case 24:
           return _context.abrupt("return", res.status(201).json({
             user: user
           }));
-        case 16:
-          _context.prev = 16;
+        case 27:
+          _context.prev = 27;
           _context.t0 = _context["catch"](0);
           console.error(_context.t0);
           return _context.abrupt("return", res.status(400).end());
-        case 20:
+        case 31:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[0, 16]]);
+    }, _callee, null, [[0, 27]]);
   }));
   return function signup(_x, _x2) {
     return _ref.apply(this, arguments);
@@ -108,27 +141,33 @@ var signin = /*#__PURE__*/function () {
           }).populate('department').populate('courses').exec();
         case 10:
           user = _context2.sent;
-          token = newToken(user);
-          if (token) {
-            _context2.next = 14;
+          if (user) {
+            _context2.next = 13;
             break;
           }
           return _context2.abrupt("return", res.status(400).end());
-        case 14:
+        case 13:
+          token = newToken(user);
+          if (token) {
+            _context2.next = 16;
+            break;
+          }
+          return _context2.abrupt("return", res.status(400).end());
+        case 16:
           return _context2.abrupt("return", res.status(201).json({
             user: user,
             token: token
           }));
-        case 17:
-          _context2.prev = 17;
+        case 19:
+          _context2.prev = 19;
           _context2.t0 = _context2["catch"](0);
           console.error(_context2.t0);
           return _context2.abrupt("return", res.status(400).end());
-        case 21:
+        case 23:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[0, 17]]);
+    }, _callee2, null, [[0, 19]]);
   }));
   return function signin(_x3, _x4) {
     return _ref2.apply(this, arguments);

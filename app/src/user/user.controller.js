@@ -55,11 +55,14 @@ export const getAllDoctors = async (req , res) => {
         res.status(400).end()
     }
 }
+
+
 export const getUser = async (req , res) => {
     try {
 
         const user = await User.findOne({_id: req.params.id})
-        .populate('department' , 'course')
+        .populate('department')
+        .populate( 'courses')
         .lean()
         .exec()
 
@@ -72,6 +75,7 @@ export const getUser = async (req , res) => {
         return res.status(400).end();
     }
 }
+
 
 export const updateUser = async (req , res) => {
     try {
@@ -130,7 +134,7 @@ export const updateUser = async (req , res) => {
                 if(!course) {
                     return res.status(400).json({error: "course error!!"})
                 }
-                
+
                 if(!course.users.includes(ownerId)) {
                     const updatedCourse  = await Course.updateOne({_id:course._id} , {$push: {users: ownerId}} , {new: true}); 
 
