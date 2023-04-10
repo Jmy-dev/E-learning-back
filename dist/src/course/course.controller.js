@@ -140,13 +140,13 @@ var createCourse = /*#__PURE__*/function () {
 exports.createCourse = createCourse;
 var updateCourse = /*#__PURE__*/function () {
   var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(req, res) {
-    var course, _updatedCourse, _course, _updatedCourse2, _course2, _updatedCourse3, _course3, department, updatedDepartment, body, updatedCourse;
+    var course, _updatedCourse, _course, _updatedCourse2, _course2, _updatedCourse3, courses, _updatedCourse4, _course3, department, updatedDepartment, body, updatedCourse;
     return _regenerator["default"].wrap(function _callee4$(_context4) {
       while (1) switch (_context4.prev = _context4.next) {
         case 0:
           _context4.prev = 0;
           if (!req.user.isAdmin) {
-            _context4.next = 54;
+            _context4.next = 64;
             break;
           }
           if (!req.body.videosURL) {
@@ -241,23 +241,53 @@ var updateCourse = /*#__PURE__*/function () {
           }
           return _context4.abrupt("return", res.status(400));
         case 34:
-          if (!req.body.department) {
-            _context4.next = 47;
+          if (!req.body.assignments) {
+            _context4.next = 44;
             break;
           }
           _context4.next = 37;
-          return _course4.Course.findById(req.params.id).lean().exec();
+          return _course4.Course.findById(req.params.id).exec();
         case 37:
-          _course3 = _context4.sent;
-          _context4.next = 40;
-          return _department.Department.findById(req.body.department).exec();
-        case 40:
-          department = _context4.sent;
-          if (department.courses.includes(req.params.id)) {
-            _context4.next = 47;
+          courses = _context4.sent;
+          if (courses.assignments.includes(req.body.assignments)) {
+            _context4.next = 44;
             break;
           }
-          _context4.next = 44;
+          _context4.next = 41;
+          return _course4.Course.findByIdAndUpdate({
+            _id: req.params.id
+          }, {
+            $push: {
+              assignments: req.body.assignments
+            }
+          }, {
+            "new": true
+          }).exec();
+        case 41:
+          _updatedCourse4 = _context4.sent;
+          if (_updatedCourse4) {
+            _context4.next = 44;
+            break;
+          }
+          return _context4.abrupt("return", res.status(400));
+        case 44:
+          if (!req.body.department) {
+            _context4.next = 57;
+            break;
+          }
+          _context4.next = 47;
+          return _course4.Course.findById(req.params.id).lean().exec();
+        case 47:
+          _course3 = _context4.sent;
+          _context4.next = 50;
+          return _department.Department.findById(req.body.department).exec();
+        case 50:
+          department = _context4.sent;
+          if (department.courses.includes(req.params.id)) {
+            _context4.next = 57;
+            break;
+          }
+          _context4.next = 54;
           return _department.Department.updateOne({
             _id: department._id
           }, {
@@ -267,50 +297,50 @@ var updateCourse = /*#__PURE__*/function () {
           }, {
             "new": true
           });
-        case 44:
+        case 54:
           updatedDepartment = _context4.sent;
           if (updatedDepartment) {
-            _context4.next = 47;
+            _context4.next = 57;
             break;
           }
           return _context4.abrupt("return", res.status(400));
-        case 47:
+        case 57:
           body = {
             name: req.body.name,
             code: req.body.code,
             department: req.body.department
           };
-          _context4.next = 50;
+          _context4.next = 60;
           return _course4.Course.findByIdAndUpdate({
             _id: req.params.id
           }, body, {
             "new": true
           }).populate('department').lean().exec();
-        case 50:
+        case 60:
           updatedCourse = _context4.sent;
           if (updatedCourse) {
-            _context4.next = 53;
+            _context4.next = 63;
             break;
           }
           return _context4.abrupt("return", res.status(400).end());
-        case 53:
+        case 63:
           return _context4.abrupt("return", res.status(200).json({
             updatedCourse: updatedCourse
           }));
-        case 54:
+        case 64:
           return _context4.abrupt("return", res.status(401).json({
             error: "You are not authorized to perform such an action!"
           }));
-        case 57:
-          _context4.prev = 57;
+        case 67:
+          _context4.prev = 67;
           _context4.t0 = _context4["catch"](0);
           console.error(_context4.t0);
           res.status(400).end();
-        case 61:
+        case 71:
         case "end":
           return _context4.stop();
       }
-    }, _callee4, null, [[0, 57]]);
+    }, _callee4, null, [[0, 67]]);
   }));
   return function updateCourse(_x7, _x8) {
     return _ref4.apply(this, arguments);

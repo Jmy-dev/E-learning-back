@@ -33,6 +33,9 @@ var courseSchema = new _mongoose["default"].Schema({
   }],
   quizes: [{
     type: String
+  }],
+  assignments: [{
+    type: String
   }]
 });
 var Course = _mongoose["default"].model('course', courseSchema);

@@ -112,6 +112,19 @@ export const updateCourse = async (req , res) => {
                 }
             }
 
+            if(req.body.assignments) {
+                const courses = await Course.findById(req.params.id)
+                .exec()
+
+                if(!courses.assignments.includes(req.body.assignments)) {
+                    const updatedCourse = await Course.findByIdAndUpdate({_id:req.params.id} , {$push: {assignments: req.body.assignments}} , {new: true})
+                    .exec()
+                    if(!updatedCourse) {
+                        return res.status(400)
+                    }
+                }
+            }
+
             if(req.body.department) {
 
                 const course = await Course.findById(req.params.id)
