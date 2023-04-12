@@ -19,7 +19,7 @@ var me = /*#__PURE__*/function () {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _context.next = 2;
-          return _user2.User.findById(req.user._id).populate('courses').populate('department').lean().exec();
+          return _user2.User.findById(req.user._id).populate("courses").populate("department").lean().exec();
         case 2:
           me = _context.sent;
           console.log(me);
@@ -128,7 +128,7 @@ var getUser = /*#__PURE__*/function () {
           _context4.next = 3;
           return _user2.User.findOne({
             _id: req.params.id
-          }).populate('department').populate('courses').lean().exec();
+          }).populate("department").populate("courses").lean().exec();
         case 3:
           user = _context4.sent;
           if (user) {
@@ -157,7 +157,7 @@ var getUser = /*#__PURE__*/function () {
 exports.getUser = getUser;
 var updateUser = /*#__PURE__*/function () {
   var _ref5 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(req, res) {
-    var ownerId, executerId, user, department, updatedDepartment, _user, course, updatedCourse, updatedUser;
+    var ownerId, executerId, user, department, updatedDepartment, _user, course, updatedCourse, _updatedUser, body, updatedUser;
     return _regenerator["default"].wrap(function _callee5$(_context5) {
       while (1) switch (_context5.prev = _context5.next) {
         case 0:
@@ -168,10 +168,10 @@ var updateUser = /*#__PURE__*/function () {
           }
           return _context5.abrupt("return", res.status(400).end());
         case 3:
-          ownerId = req.params.id; //EXECUTER 
+          ownerId = req.params.id; //EXECUTER
           executerId = req.user._id;
           if (!(ownerId == executerId || req.user.isAdmin)) {
-            _context5.next = 46;
+            _context5.next = 52;
             break;
           }
           if (!req.body.department) {
@@ -225,7 +225,7 @@ var updateUser = /*#__PURE__*/function () {
           return _context5.abrupt("return", res.status(400));
         case 23:
           if (!req.body.courses) {
-            _context5.next = 40;
+            _context5.next = 45;
             break;
           }
           _context5.next = 26;
@@ -253,7 +253,7 @@ var updateUser = /*#__PURE__*/function () {
           }));
         case 34:
           if (course.users.includes(ownerId)) {
-            _context5.next = 40;
+            _context5.next = 45;
             break;
           }
           _context5.next = 37;
@@ -275,36 +275,57 @@ var updateUser = /*#__PURE__*/function () {
           return _context5.abrupt("return", res.status(400));
         case 40:
           _context5.next = 42;
-          return _user2.User.findOneAndUpdate({
-            _id: req.params.id
-          }, req.body, {
+          return _user2.User.findByIdAndUpdate(ownerId, {
+            $push: {
+              courses: course._id
+            }
+          }, {
             "new": true
           }).exec();
         case 42:
-          updatedUser = _context5.sent;
-          if (updatedUser) {
+          _updatedUser = _context5.sent;
+          if (_updatedUser) {
             _context5.next = 45;
             break;
           }
-          return _context5.abrupt("return", res.status(400).end());
+          return _context5.abrupt("return", res.status(400));
         case 45:
+          body = {
+            password: req.body.password,
+            level: req.body.level,
+            isDoctor: req.body.isDoctor
+          };
+          _context5.next = 48;
+          return _user2.User.findOneAndUpdate({
+            _id: req.params.id
+          }, body, {
+            "new": true
+          }).exec();
+        case 48:
+          updatedUser = _context5.sent;
+          if (updatedUser) {
+            _context5.next = 51;
+            break;
+          }
+          return _context5.abrupt("return", res.status(400).end());
+        case 51:
           return _context5.abrupt("return", res.status(201).json({
             updatedUser: updatedUser
           }));
-        case 46:
+        case 52:
           return _context5.abrupt("return", res.status(401).json({
-            error: 'you are not authorized!!'
+            error: "you are not authorized!!"
           }));
-        case 49:
-          _context5.prev = 49;
+        case 55:
+          _context5.prev = 55;
           _context5.t0 = _context5["catch"](0);
           console.error(_context5.t0);
           res.status(400).end();
-        case 53:
+        case 59:
         case "end":
           return _context5.stop();
       }
-    }, _callee5, null, [[0, 49]]);
+    }, _callee5, null, [[0, 55]]);
   }));
   return function updateUser(_x9, _x10) {
     return _ref5.apply(this, arguments);
@@ -345,7 +366,7 @@ var deleteUser = /*#__PURE__*/function () {
           return _context6.abrupt("return", res.status(400).end());
         case 12:
           return _context6.abrupt("return", res.status(200).json({
-            msg: 'deleted!'
+            msg: "deleted!"
           }));
         case 13:
           return _context6.abrupt("return", res.status(401).json({
