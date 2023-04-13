@@ -19,7 +19,7 @@ var getDepartment = /*#__PURE__*/function () {
         case 0:
           _context.prev = 0;
           _context.next = 3;
-          return _department.Department.findById(req.params.id).populate('users').populate('courses').lean().exec();
+          return _department.Department.findById(req.params.id).populate("users").populate("courses").lean().exec();
         case 3:
           department = _context.sent;
           if (!department) {
@@ -266,7 +266,7 @@ var getAllDepartments = /*#__PURE__*/function () {
         case 0:
           _context5.prev = 0;
           _context5.next = 3;
-          return _department.Department.find({}).populate('courses').populate('users').lean().exec();
+          return _department.Department.find({}).populate("courses").populate("users").lean().exec();
         case 3:
           departments = _context5.sent;
           if (!(departments.length == 0)) {
@@ -310,7 +310,7 @@ var getDepartmentUsers = /*#__PURE__*/function () {
         case 0:
           _context6.prev = 0;
           _context6.next = 3;
-          return _department.Department.findById(req.params.id).select('users').populate('users').lean().exec();
+          return _department.Department.findById(req.params.id).select("users").populate("users").lean().exec();
         case 3:
           users = _context6.sent;
           if (!users) {
@@ -348,7 +348,9 @@ var getAllDepartmentCourses = /*#__PURE__*/function () {
         case 0:
           _context7.prev = 0;
           _context7.next = 3;
-          return _department.Department.findById(req.params.id).select('courses').populate('courses').lean().exec();
+          return _course.Course.find({
+            department: req.params.id
+          }).populate("users").lean().exec();
         case 3:
           courses = _context7.sent;
           if (courses) {

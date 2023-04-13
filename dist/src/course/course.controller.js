@@ -54,7 +54,7 @@ var getAllCourses = /*#__PURE__*/function () {
         case 0:
           _context2.prev = 0;
           _context2.next = 3;
-          return _course4.Course.find({}).populate('department').populate('users').lean().exec();
+          return _course4.Course.find({}).populate("department").populate("users").lean().exec();
         case 3:
           courses = _context2.sent;
           if (!(courses.length == 0)) {
@@ -145,7 +145,7 @@ var updateCourse = /*#__PURE__*/function () {
       while (1) switch (_context4.prev = _context4.next) {
         case 0:
           _context4.prev = 0;
-          if (!req.user.isAdmin) {
+          if (!(req.user.isAdmin || req.user.isDoctor)) {
             _context4.next = 64;
             break;
           }
@@ -315,7 +315,7 @@ var updateCourse = /*#__PURE__*/function () {
             _id: req.params.id
           }, body, {
             "new": true
-          }).populate('department').lean().exec();
+          }).populate("department").lean().exec();
         case 60:
           updatedCourse = _context4.sent;
           if (updatedCourse) {
