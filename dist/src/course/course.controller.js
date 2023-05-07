@@ -9,7 +9,7 @@ var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"))
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 var _course4 = require("./course.model");
 var _user = require("../user/user.model");
-var _department = require("../department/department.model");
+var _department3 = require("../department/department.model");
 var _course5 = require("../../validation/course");
 var getCourse = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res) {
@@ -140,7 +140,7 @@ var createCourse = /*#__PURE__*/function () {
 exports.createCourse = createCourse;
 var updateCourse = /*#__PURE__*/function () {
   var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(req, res) {
-    var course, _updatedCourse, _course, _updatedCourse2, _course2, _updatedCourse3, courses, _updatedCourse4, _course3, department, updatedDepartment, body, updatedCourse;
+    var course, _updatedCourse, _course, _updatedCourse2, _course2, _updatedCourse3, courses, _updatedCourse4, _course3, _department, updatedDepartment, body, updatedCourse;
     return _regenerator["default"].wrap(function _callee4$(_context4) {
       while (1) switch (_context4.prev = _context4.next) {
         case 0:
@@ -280,16 +280,16 @@ var updateCourse = /*#__PURE__*/function () {
         case 47:
           _course3 = _context4.sent;
           _context4.next = 50;
-          return _department.Department.findById(req.body.department).exec();
+          return _department3.Department.findById(req.body.department).exec();
         case 50:
-          department = _context4.sent;
-          if (department.courses.includes(req.params.id)) {
+          _department = _context4.sent;
+          if (_department.courses.includes(req.params.id)) {
             _context4.next = 57;
             break;
           }
           _context4.next = 54;
-          return _department.Department.updateOne({
-            _id: department._id
+          return _department3.Department.updateOne({
+            _id: _department._id
           }, {
             $push: {
               courses: req.params.id
@@ -349,34 +349,30 @@ var updateCourse = /*#__PURE__*/function () {
 exports.updateCourse = updateCourse;
 var deleteCourse = /*#__PURE__*/function () {
   var _ref5 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(req, res) {
-    var course, index, user, department, deletedCourse;
+    var course, index, user, _department2, deletedCourse;
     return _regenerator["default"].wrap(function _callee5$(_context5) {
       while (1) switch (_context5.prev = _context5.next) {
         case 0:
           _context5.prev = 0;
-          if (!req.user.isAdmin) {
-            _context5.next = 28;
-            break;
-          }
-          _context5.next = 4;
+          _context5.next = 3;
           return _course4.Course.findById(req.params.id).lean().exec();
-        case 4:
+        case 3:
           course = _context5.sent;
           if (course) {
-            _context5.next = 7;
+            _context5.next = 6;
             break;
           }
           return _context5.abrupt("return", res.status(404).json({
             messgae: "there is no such Course"
           }));
-        case 7:
+        case 6:
           index = 0;
-        case 8:
+        case 7:
           if (!(index < course.users.length)) {
-            _context5.next = 17;
+            _context5.next = 16;
             break;
           }
-          _context5.next = 11;
+          _context5.next = 10;
           return _user.User.findByIdAndUpdate({
             _id: course.users[index]
           }, {
@@ -386,22 +382,26 @@ var deleteCourse = /*#__PURE__*/function () {
           }, {
             "new": true
           });
-        case 11:
+        case 10:
           user = _context5.sent;
           if (user) {
-            _context5.next = 14;
+            _context5.next = 13;
             break;
           }
           return _context5.abrupt("return", res.status(404).json({
             msg: "user error!!  "
           }));
-        case 14:
+        case 13:
           index++;
-          _context5.next = 8;
+          _context5.next = 7;
           break;
-        case 17:
+        case 16:
+          if (!req.user.department) {
+            _context5.next = 20;
+            break;
+          }
           _context5.next = 19;
-          return _department.Department.findByIdAndUpdate({
+          return _department3.Department.findByIdAndUpdate({
             _id: course.department
           }, {
             $unset: {
@@ -411,7 +411,8 @@ var deleteCourse = /*#__PURE__*/function () {
             "new": true
           });
         case 19:
-          department = _context5.sent;
+          _department2 = _context5.sent;
+        case 20:
           if (department) {
             _context5.next = 22;
             break;
@@ -432,10 +433,6 @@ var deleteCourse = /*#__PURE__*/function () {
         case 27:
           return _context5.abrupt("return", res.status(200).json({
             Message: "Course Deleted!"
-          }));
-        case 28:
-          return _context5.abrupt("return", res.status(401).json({
-            error: "You are not authorized to perform such an action!"
           }));
         case 31:
           _context5.prev = 31;

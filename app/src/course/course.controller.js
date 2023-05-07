@@ -169,7 +169,7 @@ export const updateCourse = async (req, res) => {
 
 export const deleteCourse = async (req, res) => {
   try {
-    if (req.user.isAdmin) {
+     //if (req.user.isAdmin) {
       const course = await Course.findById(req.params.id).lean().exec();
 
       if (!course) {
@@ -187,11 +187,14 @@ export const deleteCourse = async (req, res) => {
           return res.status(404).json({ msg: "user error!!  " });
         }
       }
-      const department = await Department.findByIdAndUpdate(
-        { _id: course.department },
-        { $unset: { courses: course._id } },
-        { new: true }
-      );
+      if(req.user.department) {
+        
+        const department = await Department.findByIdAndUpdate(
+          { _id: course.department },
+          { $unset: { courses: course._id } },
+          { new: true }
+        );
+      }
 
       if (!department) {
         return res.status(404).json({ msg: "department error!!  " });
@@ -204,7 +207,7 @@ export const deleteCourse = async (req, res) => {
         return res.status(400).end();
       }
       return res.status(200).json({ Message: "Course Deleted!" });
-    }
+    //}
     return res
       .status(401)
       .json({ error: "You are not authorized to perform such an action!" });
