@@ -11,6 +11,7 @@ var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 var _dev = require("../config/dev");
 var _user = require("../src/user/user.model");
 var _department = require("../src/department/department.model");
+var _course = require("../src/course/course.model");
 var _login = require("../validation/login");
 var _register = require("../validation/register");
 var newToken = function newToken(user) {
@@ -34,7 +35,7 @@ var verifyToken = function verifyToken(token) {
 exports.verifyToken = verifyToken;
 var signup = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res) {
-    var _yield$validateRegist, errors, isValid, user, department, updatedDepartment;
+    var _yield$validateRegist, errors, isValid, user, department, updatedDepartment, course, updatedCourse;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -95,19 +96,51 @@ var signup = /*#__PURE__*/function () {
           }
           return _context.abrupt("return", res.status(400).end());
         case 24:
+          if (!req.body.courses) {
+            _context.next = 35;
+            break;
+          }
+          _context.next = 27;
+          return _course.Course.findById(req.body.courses).lean().exec();
+        case 27:
+          course = _context.sent;
+          if (course) {
+            _context.next = 30;
+            break;
+          }
+          return _context.abrupt("return", res.status(400).json({
+            error: "There is no such Course"
+          }));
+        case 30:
+          _context.next = 32;
+          return _course.Course.findByIdAndUpdate(req.body.courses, {
+            $push: {
+              users: user.id
+            }
+          }, {
+            "new": true
+          }).lean().exec();
+        case 32:
+          updatedCourse = _context.sent;
+          if (updatedCourse) {
+            _context.next = 35;
+            break;
+          }
+          return _context.abrupt("return", res.status(400).end());
+        case 35:
           return _context.abrupt("return", res.status(201).json({
             user: user
           }));
-        case 27:
-          _context.prev = 27;
+        case 38:
+          _context.prev = 38;
           _context.t0 = _context["catch"](0);
           console.error(_context.t0);
           return _context.abrupt("return", res.status(400).end());
-        case 31:
+        case 42:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[0, 27]]);
+    }, _callee, null, [[0, 38]]);
   }));
   return function signup(_x, _x2) {
     return _ref.apply(this, arguments);

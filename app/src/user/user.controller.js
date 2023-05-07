@@ -147,7 +147,8 @@ export const updateUser = async (req, res) => {
         { _id: req.params.id },
         body,
         { new: true }
-      ).exec();
+      )
+      .exec();
 
       if (!updatedUser) {
         return res.status(400).end();

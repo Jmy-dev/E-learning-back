@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 import {config} from '../config/dev'
 import {User} from '../src/user/user.model'
 import { Department } from '../src/department/department.model'
+import { Course } from '../src/course/course.model'
 import { validateLoginInput } from '../validation/login'
 import { validateRegisterInput } from '../validation/register'
 
@@ -64,7 +65,29 @@ export const signup = async (req , res) => {
             if(!updatedDepartment) {
                 return res.status(400).end()
             }
-        }
+        } 
+
+        
+        if(req.body.courses) {
+            const course = await Course.findById(req.body.courses)
+            .lean()
+            .exec()
+    
+            if(!course) {
+                return res.status(400).json({error: "There is no such Course"}) 
+            }
+    
+        
+    
+            const updatedCourse = await Course.findByIdAndUpdate(req.body.courses , {$push: {users:user.id}} , {new : true})
+            .lean()
+            .exec()
+
+            if(!updatedCourse) {
+                return res.status(400).end()
+            }
+        } 
+
 
 
         return res.status(201).json({user})
