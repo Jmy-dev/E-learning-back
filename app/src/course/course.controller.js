@@ -176,29 +176,34 @@ export const deleteCourse = async (req, res) => {
         return res.status(404).json({ messgae: "there is no such Course" });
       }
 
-      for (let index = 0; index < course.users.length; index++) {
-        const user = await User.findByIdAndUpdate(
-          { _id: course.users[index] },
-          { $unset: { courses: course._id } },
-          { new: true }
-        );
+      if(course.users)
+      {
 
-        if (!user) {
-          return res.status(404).json({ msg: "user error!!  " });
+        for (let index = 0; index < course.users.length; index++) {
+          const user = await User.findByIdAndUpdate(
+            { _id: course.users[index] },
+            { $unset: { courses: course._id } },
+            { new: true }
+          );
+  
+          if (!user) {
+            return res.status(404).json({ msg: "user error!!  " });
+          }
         }
       }
-      if(req.user.department) {
+
+      if(course.department) {
         
         const department = await Department.findByIdAndUpdate(
           { _id: course.department },
           { $unset: { courses: course._id } },
           { new: true }
         );
+        if (!department) {
+          return res.status(404).json({ msg: "department error!!  " });
+        }
       }
 
-      if (!department) {
-        return res.status(404).json({ msg: "department error!!  " });
-      }
       const deletedCourse = await Course.findByIdAndDelete(req.params.id)
         .lean()
         .exec();

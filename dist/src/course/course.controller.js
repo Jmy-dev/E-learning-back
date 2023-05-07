@@ -9,7 +9,7 @@ var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"))
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 var _course4 = require("./course.model");
 var _user = require("../user/user.model");
-var _department3 = require("../department/department.model");
+var _department = require("../department/department.model");
 var _course5 = require("../../validation/course");
 var getCourse = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res) {
@@ -140,7 +140,7 @@ var createCourse = /*#__PURE__*/function () {
 exports.createCourse = createCourse;
 var updateCourse = /*#__PURE__*/function () {
   var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(req, res) {
-    var course, _updatedCourse, _course, _updatedCourse2, _course2, _updatedCourse3, courses, _updatedCourse4, _course3, _department, updatedDepartment, body, updatedCourse;
+    var course, _updatedCourse, _course, _updatedCourse2, _course2, _updatedCourse3, courses, _updatedCourse4, _course3, department, updatedDepartment, body, updatedCourse;
     return _regenerator["default"].wrap(function _callee4$(_context4) {
       while (1) switch (_context4.prev = _context4.next) {
         case 0:
@@ -280,16 +280,16 @@ var updateCourse = /*#__PURE__*/function () {
         case 47:
           _course3 = _context4.sent;
           _context4.next = 50;
-          return _department3.Department.findById(req.body.department).exec();
+          return _department.Department.findById(req.body.department).exec();
         case 50:
-          _department = _context4.sent;
-          if (_department.courses.includes(req.params.id)) {
+          department = _context4.sent;
+          if (department.courses.includes(req.params.id)) {
             _context4.next = 57;
             break;
           }
           _context4.next = 54;
-          return _department3.Department.updateOne({
-            _id: _department._id
+          return _department.Department.updateOne({
+            _id: department._id
           }, {
             $push: {
               courses: req.params.id
@@ -349,7 +349,7 @@ var updateCourse = /*#__PURE__*/function () {
 exports.updateCourse = updateCourse;
 var deleteCourse = /*#__PURE__*/function () {
   var _ref5 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(req, res) {
-    var course, index, user, _department2, deletedCourse;
+    var course, index, user, department, deletedCourse;
     return _regenerator["default"].wrap(function _callee5$(_context5) {
       while (1) switch (_context5.prev = _context5.next) {
         case 0:
@@ -366,13 +366,17 @@ var deleteCourse = /*#__PURE__*/function () {
             messgae: "there is no such Course"
           }));
         case 6:
-          index = 0;
-        case 7:
-          if (!(index < course.users.length)) {
-            _context5.next = 16;
+          if (!course.users) {
+            _context5.next = 17;
             break;
           }
-          _context5.next = 10;
+          index = 0;
+        case 8:
+          if (!(index < course.users.length)) {
+            _context5.next = 17;
+            break;
+          }
+          _context5.next = 11;
           return _user.User.findByIdAndUpdate({
             _id: course.users[index]
           }, {
@@ -382,26 +386,26 @@ var deleteCourse = /*#__PURE__*/function () {
           }, {
             "new": true
           });
-        case 10:
+        case 11:
           user = _context5.sent;
           if (user) {
-            _context5.next = 13;
+            _context5.next = 14;
             break;
           }
           return _context5.abrupt("return", res.status(404).json({
             msg: "user error!!  "
           }));
-        case 13:
+        case 14:
           index++;
-          _context5.next = 7;
+          _context5.next = 8;
           break;
-        case 16:
-          if (!req.user.department) {
-            _context5.next = 20;
+        case 17:
+          if (!course.department) {
+            _context5.next = 23;
             break;
           }
-          _context5.next = 19;
-          return _department3.Department.findByIdAndUpdate({
+          _context5.next = 20;
+          return _department.Department.findByIdAndUpdate({
             _id: course.department
           }, {
             $unset: {
@@ -410,40 +414,39 @@ var deleteCourse = /*#__PURE__*/function () {
           }, {
             "new": true
           });
-        case 19:
-          _department2 = _context5.sent;
         case 20:
+          department = _context5.sent;
           if (department) {
-            _context5.next = 22;
+            _context5.next = 23;
             break;
           }
           return _context5.abrupt("return", res.status(404).json({
             msg: "department error!!  "
           }));
-        case 22:
-          _context5.next = 24;
+        case 23:
+          _context5.next = 25;
           return _course4.Course.findByIdAndDelete(req.params.id).lean().exec();
-        case 24:
+        case 25:
           deletedCourse = _context5.sent;
           if (deletedCourse) {
-            _context5.next = 27;
+            _context5.next = 28;
             break;
           }
           return _context5.abrupt("return", res.status(400).end());
-        case 27:
+        case 28:
           return _context5.abrupt("return", res.status(200).json({
             Message: "Course Deleted!"
           }));
-        case 31:
-          _context5.prev = 31;
+        case 32:
+          _context5.prev = 32;
           _context5.t0 = _context5["catch"](0);
           console.error(_context5.t0);
           res.status(400).end();
-        case 35:
+        case 36:
         case "end":
           return _context5.stop();
       }
-    }, _callee5, null, [[0, 31]]);
+    }, _callee5, null, [[0, 32]]);
   }));
   return function deleteCourse(_x9, _x10) {
     return _ref5.apply(this, arguments);

@@ -150,7 +150,7 @@ var deleteDepartment = /*#__PURE__*/function () {
         case 0:
           _context4.prev = 0;
           if (!req.user.isAdmin) {
-            _context4.next = 33;
+            _context4.next = 35;
             break;
           }
           _context4.next = 4;
@@ -165,13 +165,17 @@ var deleteDepartment = /*#__PURE__*/function () {
             error: "there is no such department!"
           }));
         case 7:
-          index = 0;
-        case 8:
-          if (!(index < department.users.length)) {
-            _context4.next = 17;
+          if (!department.users) {
+            _context4.next = 18;
             break;
           }
-          _context4.next = 11;
+          index = 0;
+        case 9:
+          if (!(index < department.users.length)) {
+            _context4.next = 18;
+            break;
+          }
+          _context4.next = 12;
           return _user.User.findByIdAndUpdate({
             _id: department.users[index]
           }, {
@@ -181,27 +185,31 @@ var deleteDepartment = /*#__PURE__*/function () {
           }, {
             "new": true
           });
-        case 11:
+        case 12:
           user = _context4.sent;
           if (user) {
-            _context4.next = 14;
+            _context4.next = 15;
             break;
           }
           return _context4.abrupt("return", res.status(400).json({
             msg: "user error!!  "
           }));
-        case 14:
+        case 15:
           index++;
-          _context4.next = 8;
+          _context4.next = 9;
           break;
-        case 17:
-          _index = 0;
         case 18:
-          if (!(_index < department.courses.length)) {
-            _context4.next = 27;
+          if (!department.courses) {
+            _context4.next = 29;
             break;
           }
-          _context4.next = 21;
+          _index = 0;
+        case 20:
+          if (!(_index < department.courses.length)) {
+            _context4.next = 29;
+            break;
+          }
+          _context4.next = 23;
           return _course.Course.findByIdAndUpdate({
             _id: department.courses[_index]
           }, {
@@ -211,47 +219,47 @@ var deleteDepartment = /*#__PURE__*/function () {
           }, {
             "new": true
           });
-        case 21:
+        case 23:
           course = _context4.sent;
           if (course) {
-            _context4.next = 24;
+            _context4.next = 26;
             break;
           }
           return _context4.abrupt("return", res.status(400).json({
             msg: "course error!!"
           }));
-        case 24:
+        case 26:
           _index++;
-          _context4.next = 18;
+          _context4.next = 20;
           break;
-        case 27:
-          _context4.next = 29;
-          return _department.Department.findByIdAndDelete(req.params.id);
         case 29:
+          _context4.next = 31;
+          return _department.Department.findByIdAndDelete(req.params.id);
+        case 31:
           _deleteDepartment = _context4.sent;
           if (!_deleteDepartment) {
-            _context4.next = 32;
+            _context4.next = 34;
             break;
           }
           return _context4.abrupt("return", res.status(200).json({
             msg: "Department Deleted"
           }));
-        case 32:
+        case 34:
           return _context4.abrupt("return", res.status(400).end());
-        case 33:
+        case 35:
           return _context4.abrupt("return", res.status(401).json({
             error: "You are not authorized to perform such an action!"
           }));
-        case 36:
-          _context4.prev = 36;
+        case 38:
+          _context4.prev = 38;
           _context4.t0 = _context4["catch"](0);
           console.error(_context4.t0);
           res.status(400).end();
-        case 40:
+        case 42:
         case "end":
           return _context4.stop();
       }
-    }, _callee4, null, [[0, 36]]);
+    }, _callee4, null, [[0, 38]]);
   }));
   return function deleteDepartment(_x7, _x8) {
     return _ref4.apply(this, arguments);
