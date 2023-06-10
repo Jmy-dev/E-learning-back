@@ -147,7 +147,7 @@ export const protect = async (req , res , next) => {
         let token = req.headers.authorization.split('Bearer ')[1];
 
         if (!token) {
-            return res.status(400).end();
+            return res.status(401).json({error: 'Not Authorized!!'});
 
         }
         const payload = await verifyToken(token);
@@ -162,10 +162,10 @@ export const protect = async (req , res , next) => {
         .exec()
 
         if (!user) {
-            return res.status(400).end()
+            return res.status(401).json({error: "Nor Authorized"})
         }
 
-        console.log( "user here" , user) 
+        
 
         req.user = user;
         next()
@@ -174,6 +174,6 @@ export const protect = async (req , res , next) => {
         
     } catch (e) {
         console.error(e)
-        return res.status(400).json({error: 'Not Authorized'})
+        return res.status(401).json({error: 'Not Authorized'})
     }
 }

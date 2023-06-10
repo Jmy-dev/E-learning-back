@@ -227,7 +227,9 @@ var protect = /*#__PURE__*/function () {
             _context3.next = 6;
             break;
           }
-          return _context3.abrupt("return", res.status(400).end());
+          return _context3.abrupt("return", res.status(401).json({
+            error: 'Not Authorized!!'
+          }));
         case 6:
           _context3.next = 8;
           return verifyToken(token);
@@ -249,25 +251,26 @@ var protect = /*#__PURE__*/function () {
             _context3.next = 16;
             break;
           }
-          return _context3.abrupt("return", res.status(400).end());
+          return _context3.abrupt("return", res.status(401).json({
+            error: "Nor Authorized"
+          }));
         case 16:
-          console.log("user here", user);
           req.user = user;
           next();
-          _context3.next = 25;
+          _context3.next = 24;
           break;
-        case 21:
-          _context3.prev = 21;
+        case 20:
+          _context3.prev = 20;
           _context3.t0 = _context3["catch"](0);
           console.error(_context3.t0);
-          return _context3.abrupt("return", res.status(400).json({
+          return _context3.abrupt("return", res.status(401).json({
             error: 'Not Authorized'
           }));
-        case 25:
+        case 24:
         case "end":
           return _context3.stop();
       }
-    }, _callee3, null, [[0, 21]]);
+    }, _callee3, null, [[0, 20]]);
   }));
   return function protect(_x5, _x6, _x7) {
     return _ref3.apply(this, arguments);
