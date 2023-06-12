@@ -19,7 +19,12 @@ var me = /*#__PURE__*/function () {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _context.next = 2;
-          return _user2.User.findById(req.user._id).populate("courses").populate("department").lean().exec();
+          return _user2.User.findById(req.user._id).populate("courses").populate("department").populate({
+            path: "courses",
+            populate: {
+              path: "users"
+            }
+          }).lean().exec();
         case 2:
           me = _context.sent;
           console.log(me);

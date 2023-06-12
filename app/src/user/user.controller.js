@@ -9,6 +9,12 @@ export const me = async (req, res) => {
   const me = await User.findById(req.user._id)
     .populate("courses")
     .populate("department")
+    .populate({
+      path: "courses",
+      populate: {
+        path: "users",
+      },
+    })
     .lean()
     .exec();
   console.log(me);
@@ -147,8 +153,7 @@ export const updateUser = async (req, res) => {
         { _id: req.params.id },
         body,
         { new: true }
-      )
-      .exec();
+      ).exec();
 
       if (!updatedUser) {
         return res.status(400).end();
